@@ -101,7 +101,6 @@ class Game extends React.Component {
     const current = history[stepNumber];
     const winner = calculateWinner(current.squares);
     const moves = history.map((step, move) => {
-      console.log(history[move]["squares"])
       if (move !== 0) {
         const oldArr = history[move-1]["squares"]
         const newArr = history[move]["squares"]
