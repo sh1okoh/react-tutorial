@@ -1,6 +1,8 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
 import './index.css';
+import { tsThisType } from '@babel/types';
+import { get } from 'http';
 
 function Square(props) {
   return (
@@ -9,6 +11,7 @@ function Square(props) {
     </button>
   );
 }
+
 
 class Board extends React.Component {
   handleClick(i) {
@@ -34,7 +37,6 @@ class Board extends React.Component {
       />
     );
   }
-
   render() {
     return (
       <div>
@@ -71,11 +73,10 @@ class Game extends React.Component {
   }
 
   handleClick(i) {
-    // const history = this.state.history;
     const history = this.state.history.slice(0, this.state.stepNumber + 1);
+    console.log(history)
     const current = history[history.length - 1];
     const squares = current.squares.slice();
-
     if (calculateWinner(squares) || squares[i]) {
       return;
     }
@@ -95,29 +96,50 @@ class Game extends React.Component {
       xIsNext: (step % 2) === 0,
     });
   }
+
+  coloring(step) {
+    const elem = document.getElementsByTagName('li');
+    const num = elem.length;
+    for (var i = 0; i < num; i++) {
+      if (elem[i].className === 'colored') {
+        elem[i].classList.remove('colored');
+      }
+    }
+    document.getElementById(step).classList.add('colored');
+  }
+
   render() {
     const history = this.state.history;
+    let isLastBtn = false
     const stepNumber = this.state.stepNumber
     const current = history[stepNumber];
     const winner = calculateWinner(current.squares);
     const moves = history.map((step, move) => {
       if (move !== 0) {
-        const oldArr = history[move-1]["squares"]
-        const newArr = history[move]["squares"]
-        const diffIndex = newArr.findIndex((v, i) => oldArr[i] !== v)
-        const col = diffIndex % 3 + 1
-        const row = Math.floor(diffIndex / 3) + 1
+        const oldArr = history[move-1]["squares"];
+        const newArr = history[move]["squares"];
+        const diffIndex = newArr.findIndex((v, i) => oldArr[i] !== v);
+        const col = diffIndex % 3 + 1;
+        const row = Math.floor(diffIndex / 3) + 1;
         const desc = '(' + col + ',' + row + ')';
+        if (move === stepNumber) {
+          isLastBtn = !isLastBtn
+        }
         return(
-          <li key={　move　}>
-          <button onClick={() => this.jumpTo(move)}>{ desc }</button>
+          <li id={move} key={move} className={ isLastBtn ? 'colored' : ''}>
+          <button onClick={() => {
+            this.jumpTo(move);
+            this.coloring(move);
+          }}>{desc}</button>
           </li>
         );
       } else {
         const desc = 'Go to game start';
         return(
-          <li key={　move　}>
-          <button onClick={() => this.jumpTo(move)}>{ desc }</button>
+          <li id={move} key={move} >
+          <button onClick={
+          () => this.jumpTo(move)
+          }>{desc}</button>
           </li>
         );
       }
