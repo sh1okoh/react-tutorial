@@ -1,8 +1,7 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
 import './index.css';
-import { tsThisType } from '@babel/types';
-import { get } from 'http';
+import { isReturnStatement } from '@babel/types';
 
 function Square(props) {
   return (
@@ -11,7 +10,6 @@ function Square(props) {
     </button>
   );
 }
-
 
 class Board extends React.Component {
   handleClick(i) {
@@ -34,27 +32,30 @@ class Board extends React.Component {
       <Square
         value={this.props.squares[i]}
         onClick={() => this.props.onClick(i)}
+        key={i}
       />
     );
   }
   render() {
+    const items = [];
     return (
       <div>
-        <div className="board-row">
-          {this.renderSquare(0)}
-          {this.renderSquare(1)}
-          {this.renderSquare(2)}
-        </div>
-        <div className="board-row">
-          {this.renderSquare(3)}
-          {this.renderSquare(4)}
-          {this.renderSquare(5)}
-        </div>
-        <div className="board-row">
-          {this.renderSquare(6)}
-          {this.renderSquare(7)}
-          {this.renderSquare(8)}
-        </div>
+          {
+              Array(3).fill(0).map((row, i) => {
+                  console.log(row,i);
+                  return (
+                      <div className="board-row" key={i}>
+                          {
+                              Array(3).fill(0).map((col, j) => {
+                                  return(
+                                      this.renderSquare(i * 3 + j)
+                                  )
+                              })
+                          }
+                      </div>
+                  )
+              })
+          }
       </div>
     );
   }
@@ -97,17 +98,6 @@ class Game extends React.Component {
     });
   }
 
-//   coloring(step) {
-//     const elem = document.getElementsByTagName('li');
-//     const num = elem.length;
-//     for (var i = 0; i < num; i++) {
-//       if (elem[i].className === 'colored') {
-//         elem[i].classList.remove('colored');
-//       }
-//     }
-//     document.getElementById(step).classList.add('colored');
-//   }
-
   render() {
     const history = this.state.history;
     let isLastBtn = false
@@ -129,7 +119,9 @@ class Game extends React.Component {
           <li key={move}>
           <button onClick={() => {
             this.jumpTo(move);
-          }} className={this.state.stepNumber === move ? 'colored' : ''}>{desc}</button>
+          }} className={this.state.stepNumber === move ? 'colored' : ''}>{
+            'Go to move #' + move + desc
+            }</button>
           </li>
         );
       } else {
