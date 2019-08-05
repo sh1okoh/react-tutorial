@@ -40,7 +40,6 @@ class Board extends React.Component {
       <div>
           {
               Array(3).fill(0).map((row, i) => {
-                  console.log(row,i);
                   return (
                       <div className="board-row" key={i}>
                           {
@@ -95,6 +94,9 @@ class Game extends React.Component {
     });
   }
 
+  toggleReverseEvent() {
+  }
+
   render() {
     const history = this.state.history;
     const stepNumber = this.state.stepNumber
@@ -112,15 +114,13 @@ class Game extends React.Component {
           <li key={move}>
           <button onClick={() => {
             this.jumpTo(move);
-          }} className={this.state.stepNumber === move ? 'colored' : ''}>{
-            'Go to move #' + move + desc
-            }</button>
+          }} className={this.state.stepNumber === move ? 'colored' : ''}>{'Go to move #' + move + desc}</button>
           </li>
         );
       } else {
         const desc = 'Go to game start';
         return(
-          <li key={move}>
+          <li key={ move }>
           <button onClick={
           () => this.jumpTo(move)
           } className={this.state.stepNumber === move ? 'colored' : ''}>{desc}</button>
@@ -146,6 +146,10 @@ class Game extends React.Component {
           />
         </div>
         <div className="game-info">
+        <button onClick={()=> {
+          this.state.history.reverse()
+          console.log(this.state.history)
+        }}>toggleEvent</button>
           <div>{status}</div>
           <ol>{moves}</ol>
         </div>
