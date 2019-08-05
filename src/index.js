@@ -1,7 +1,6 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
 import './index.css';
-import { isReturnStatement } from '@babel/types';
 
 function Square(props) {
   return (
@@ -37,7 +36,6 @@ class Board extends React.Component {
     );
   }
   render() {
-    const items = [];
     return (
       <div>
           {
@@ -75,7 +73,6 @@ class Game extends React.Component {
 
   handleClick(i) {
     const history = this.state.history.slice(0, this.state.stepNumber + 1);
-    console.log("@@@", history)
     const current = history[history.length - 1];
     const squares = current.squares.slice();
     if (calculateWinner(squares) || squares[i]) {
@@ -100,7 +97,6 @@ class Game extends React.Component {
 
   render() {
     const history = this.state.history;
-    let isLastBtn = false
     const stepNumber = this.state.stepNumber
     const current = history[stepNumber];
     const winner = calculateWinner(current.squares);
@@ -112,9 +108,6 @@ class Game extends React.Component {
         const col = diffIndex % 3 + 1;
         const row = Math.floor(diffIndex / 3) + 1;
         const desc = '(' + col + ',' + row + ')';
-        if (move === stepNumber) {
-          isLastBtn = !isLastBtn
-        }
         return(
           <li key={move}>
           <button onClick={() => {
