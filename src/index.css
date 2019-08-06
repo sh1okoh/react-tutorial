@@ -52,3 +52,7 @@ ol, ul {
 .colored {
   color: red;
 }
+
+.highlight {
+  background: yellow;
+}
