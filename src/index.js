@@ -110,7 +110,6 @@ class Game extends React.Component {
     });
 
     let status;
-    console.log(winner);
     if (winner) {
       status = 'Winner: ' + winner.squares;
     } else if (winner === null && stepNumber === 9) {
