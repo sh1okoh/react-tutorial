@@ -3,8 +3,9 @@ import ReactDOM from 'react-dom';
 import './index.css';
 
 function Square(props) {
+  const className = `square ${props.isHighlight ? 'highlight' : ''}`
   return (
-    <button className={`square ${props.isHighlight ? 'highlight' : ''}`} onClick={props.onClick}>
+    <button className={className} onClick={props.onClick}>
       {props.value}
     </button>
   );
@@ -31,7 +32,7 @@ class Board extends React.Component {
                 {
                   Array(3).fill(0).map((col, j) => {
                     return(
-                      this.renderSquare(i * 3 + j, this.props.highlightSquares.indexOf(i * 3 + j) !== -1)
+                      this.renderSquare(i * 3 + j, this.props.highlightSquares.includes(i * 3 + j))
                     )
                   })
                 }
@@ -122,7 +123,7 @@ class Game extends React.Component {
             onClick={(i) => {
                 this.handleClick(i)
             }}
-            highlightSquares={ winner ? winner.line : []}
+            highlightSquares={ winner? winner.line : []}
           />
         </div>
         <div className="game-info">
