@@ -3,9 +3,9 @@ import ReactDOM from 'react-dom';
 import './index.css';
 
 function Square(props) {
-  const className = `square ${props.isHighlight ? 'highlight' : ''}`
+  const classNameValue = `square ${props.isHighlight ? 'highlight' : ''}`
   return (
-    <button className={className} onClick={props.onClick}>
+    <button className={classNameValue} onClick={props.onClick}>
       {props.value}
     </button>
   );
