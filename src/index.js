@@ -123,7 +123,7 @@ class Game extends React.Component {
             onClick={(i) => {
                 this.handleClick(i)
             }}
-            highlightSquares={ winner? winner.line : []}
+            highlightSquares={ winner ? winner.line : []}
           />
         </div>
         <div className="game-info">
