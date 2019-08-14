@@ -1,6 +1,5 @@
 import React from 'react';
 
-
 function Square(props) {
   const classNameValue = `square ${props.isHighlight ? 'highlight' : ''}`
   return (
@@ -44,62 +43,60 @@ export class Board extends React.Component {
   }
 }
 
-export class Game extends React.Component {
-  render() {
-    const history = this.props.history;
-    const stepNumber = this.props.stepNumber;
-    const current = history[stepNumber];
-    const winner = calculateWinner(current.squares);
-    let desc;
-    const moves = history.map((step, move) => {
-      if (move !== 0) {
-        const oldSquares = history[move-1]["squares"];
-        const newSquares = history[move]["squares"];
-        const diffIndex = newSquares.findIndex((v, i) => oldSquares[i] !== v);
-        const col = diffIndex % 3 + 1;
-        const row = Math.floor(diffIndex / 3) + 1;
-        desc = '(' + row + ',' + col + ')';
-      } else {
-        desc = 'Go to game start';
-      }
-      return(
-        <li key={move}>
-        <button onClick={() => {
-          this.props.jumpTo(move);
-        }} className={this.props.stepNumber === move ? 'colored' : ''}>{desc}</button>
-        </li>
-      );
-    });
-
-    let status;
-    if (winner) {
-      status = 'Winner: ' + winner.squares;
-    } else if (stepNumber === 9) {
-      status = 'Draw！'
+export function Game(props) {
+  const { history, stepNumber, isReverse, handleClick, jumpTo, reverseHistory, xIsNext } = props;
+  const current = history[stepNumber]
+  const winner = calculateWinner(current.squares);
+  let desc;
+  const moves = history.map((step, move) => {
+    if (move !== 0) {
+      const oldSquares = history[move-1]["squares"];
+      const newSquares = history[move]["squares"];
+      const diffIndex = newSquares.findIndex((v, i) => oldSquares[i] !== v);
+      const col = diffIndex % 3 + 1;
+      const row = Math.floor(diffIndex / 3) + 1;
+      desc = '(' + row + ',' + col + ')';
     } else {
-      status = 'Next player: ' + (this.props.xIsNext ? 'X' : 'O');
+      desc = 'Go to game start';
     }
-    return (
-      <div className="game">
-        <div className="game-board">
-          <Board
-            squares={current.squares}
-            onClick={(i) => {
-              this.props.handleClick(i)
-            }}
-            highlightSquares={ winner ? winner.line : []}
-          />
-        </div>
-        <div className="game-info">
-        <button onClick={(i)=> {
-          this.props.reverseHistory(i)
-        }}>toggleEvent</button>
-          <div>{status}</div>
-          <ol>{this.props.isReverse ? moves : moves.reverse()}</ol>
-        </div>
-      </div>
+    return(
+      <li key={move}>
+      <button onClick={() => {
+        jumpTo(move);
+      }} className={stepNumber === move ? 'colored' : ''}>{desc}</button>
+      </li>
     );
+  });
+
+  let status;
+  if (winner) {
+    status = 'Winner: ' + winner.squares;
+  } else if (stepNumber === 9) {
+    status = 'Draw！'
+  } else {
+    status = 'Next player: ' + (xIsNext ? 'X' : 'O');
   }
+
+  return (
+    <div className="game">
+      <div className="game-board">
+        <Board
+          squares={current.squares}
+          onClick={(i) => {
+            handleClick(i)
+          }}
+          highlightSquares={ winner ? winner.line : []}
+        />
+      </div>
+      <div className="game-info">
+      <button onClick={()=> {
+        reverseHistory()
+      }}>toggleEvent</button>
+        <div>{status}</div>
+        <ol>{isReverse ? moves : moves.reverse()}</ol>
+      </div>
+    </div>
+  );
 }
 
 function calculateWinner(squares) {

@@ -1,5 +1,5 @@
 import { combineReducers } from "redux";
-import { CLICK_SQUARE, JUMP_TO_PAST, CLICK_REVERSE_BUTTON } from "./actions";
+import { CLICK_SQUARE, JUMP_TO_PAST, CLICK_BUTTON_TO_REVERSE_HISTORY } from "./actions";
 
 const initialState = {
   history: [
@@ -30,7 +30,7 @@ function game(state = initialState, action) {
         }]),
         stepNumber: history.length,
         xIsNext: !state.xIsNext,
-        isReverse: false
+        isReverse: true
       }
     case JUMP_TO_PAST:
       return {
@@ -38,7 +38,7 @@ function game(state = initialState, action) {
         stepNumber: action.step,
         xIsNext: ( action.step % 2 ) === 0
       }
-    case CLICK_REVERSE_BUTTON:
+    case CLICK_BUTTON_TO_REVERSE_HISTORY:
       return {
         ...state,
         isReverse: !state.isReverse

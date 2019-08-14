@@ -1,5 +1,5 @@
 import { connect } from "react-redux";
-import { clickSquare, jumpToPast, reverseBtn } from "./actions";
+import { clickSquare, jumpToPast, reverseHistory } from "./actions";
 import { Game } from "./components";
 
 const mapStateToProps = (state, ownProps) => {
@@ -14,8 +14,8 @@ const mapDispatchToProps = (dispatch, ownProps) => {
     jumpTo: step => {
       dispatch(jumpToPast(step));
     },
-    reverseHistory: step => {
-      dispatch(reverseBtn(step));
+    reverseHistory: () => {
+      dispatch(reverseHistory());
     }
   };
 };
