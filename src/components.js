@@ -2,46 +2,46 @@ import React from 'react';
 import { calculateWinner } from "./utils.js";
 
 function Square(props) {
+  const { value, onClick } = props
   const classNameValue = `square ${props.isHighlight ? 'highlight' : ''}`
   return (
-    <button className={classNameValue} onClick={props.onClick}>
-      {props.value}
+    <button className={classNameValue} onClick={onClick}>
+      {value}
     </button>
   );
 }
 
-export class Board extends React.Component {
-  renderSquare(i, isHighlight) {
+export function Board(props) {
+  const { squares, onClick, highlightSquares } = props
+  function renderSquare(i, isHighlight) {
     return (
       <Square
-        value={this.props.squares[i]}
-        onClick={() => this.props.onClick(i)}
+        value={squares[i]}
+        onClick={() => onClick(i)}
         key={i}
         isHighlight={isHighlight}
       />
     );
   }
-  render() {
-    return (
-      <div>
-        {
-          Array(3).fill(0).map((row, i) => {
-            return (
-              <div className="board-row" key={i}>
-                {
-                  Array(3).fill(0).map((col, j) => {
-                    return(
-                      this.renderSquare(i * 3 + j, this.props.highlightSquares.includes(i * 3 + j))
-                    )
-                  })
-                }
-              </div>
-            )
-          })
-        }
-      </div>
-    );
-  }
+  return (
+    <div>
+      {
+        Array(3).fill(0).map((row, i) => {
+          return (
+            <div className="board-row" key={i}>
+              {
+                Array(3).fill(0).map((col, j) => {
+                  return(
+                    renderSquare(i * 3 + j, highlightSquares.includes(i * 3 + j))
+                  )
+                })
+              }
+            </div>
+          )
+        })
+      }
+    </div>
+  );
 }
 
 export function Game(props) {
