@@ -30,7 +30,7 @@ function game(state = initialState, action) {
         }]),
         stepNumber: history.length,
         xIsNext: !state.xIsNext,
-        isReverse: true
+        isReverse: state.isReverse
       }
     case JUMP_TO_PAST:
       return {
