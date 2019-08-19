@@ -1,4 +1,5 @@
 import React from 'react';
+import { BoardContainer } from './containers';
 
 function Square(props) {
   const { value, onClick } = props
@@ -11,14 +12,14 @@ function Square(props) {
 }
 
 export function Board(props) {
-  const { squares, onClick, highlightSquares } = props
+  const { squares, handleClick, highlightSquares } = props
   function renderSquare(i, isHighlight) {
     return (
       <Square
-        value={squares[i]}
-        onClick={() => onClick(i)}
+        value={ squares[i] }
+        onClick={() => handleClick(i)}
         key={i}
-        isHighlight={isHighlight}
+        isHighlight={ isHighlight }
       />
     );
   }
@@ -69,7 +70,7 @@ export function Game(props) {
   return (
     <div className="game">
       <div className="game-board">
-        <Board
+        <BoardContainer
           squares={current.squares}
           onClick={(i) => {
             handleClick(i)

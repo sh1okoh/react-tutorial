@@ -1,9 +1,9 @@
 import { connect } from "react-redux";
 import { clickSquare, jumpToPast, reverseHistory } from "./actions";
-import { Game } from "./components";
+import { Game, Board } from "./components";
 import { calculateWinner } from "./utils";
 
-const mapStateToProps = (state, ownProps) => {
+const mapStateToPropsForGameComponent = (state, ownProps) => {
   const { history, stepNumber, xIsNext, isReverse} = state.game
   const current = history[stepNumber];
   const winner = calculateWinner(current.squares);
@@ -18,11 +18,8 @@ const mapStateToProps = (state, ownProps) => {
   return {history, stepNumber, current, status, isReverse, winner};
 };
 
-const mapDispatchToProps = (dispatch, ownProps) => {
+const mapDispatchToPropsForGameComponent = (dispatch, ownProps) => {
   return {
-    handleClick: index => {
-      dispatch(clickSquare(index));
-    },
     jumpTo: step => {
       dispatch(jumpToPast(step));
     },
@@ -32,7 +29,28 @@ const mapDispatchToProps = (dispatch, ownProps) => {
   };
 };
 
+const mapStateToPropsForBoardComponent = (state, ownProps) => {
+  const { history, stepNumber } = state.game;
+  const { squares } = history[stepNumber];
+  return { squares }
+}
+
+const mapDispatchToPropsForBoardComponent = (dispatch, ownProps) => {
+  return {
+    handleClick: index => {
+      dispatch(clickSquare(index));
+    }
+  }
+}
+
 export const GameContainer = connect(
-  mapStateToProps,
-  mapDispatchToProps
+  mapStateToPropsForGameComponent,
+  mapDispatchToPropsForGameComponent
 )(Game);
+
+export const BoardContainer = connect(
+  mapStateToPropsForBoardComponent,
+  mapDispatchToPropsForBoardComponent
+)(Board);
+
+
