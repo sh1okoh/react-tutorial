@@ -1,52 +1,51 @@
 import React from 'react';
+import { BoardContainer } from './containers';
 
 function Square(props) {
+  const { value, onClick } = props
   const classNameValue = `square ${props.isHighlight ? 'highlight' : ''}`
   return (
-    <button className={classNameValue} onClick={props.onClick}>
-      {props.value}
+    <button className={classNameValue} onClick={onClick}>
+      {value}
     </button>
   );
 }
 
-export class Board extends React.Component {
-  renderSquare(i, isHighlight) {
+export function Board(props) {
+  const { squares, handleClick, highlightSquares } = props
+  function renderSquare(i, isHighlight) {
     return (
       <Square
-        value={this.props.squares[i]}
-        onClick={() => this.props.onClick(i)}
+        value={ squares[i] }
+        onClick={() => handleClick(i)}
         key={i}
-        isHighlight={isHighlight}
+        isHighlight={ isHighlight }
       />
     );
   }
-  render() {
-    return (
-      <div>
-        {
-          Array(3).fill(0).map((row, i) => {
-            return (
-              <div className="board-row" key={i}>
-                {
-                  Array(3).fill(0).map((col, j) => {
-                    return(
-                      this.renderSquare(i * 3 + j, this.props.highlightSquares.includes(i * 3 + j))
-                    )
-                  })
-                }
-              </div>
-            )
-          })
-        }
-      </div>
-    );
-  }
+  return (
+    <div>
+      {
+        Array(3).fill(0).map((row, i) => {
+          return (
+            <div className="board-row" key={i}>
+              {
+                Array(3).fill(0).map((col, j) => {
+                  return(
+                    renderSquare(i * 3 + j, highlightSquares.includes(i * 3 + j))
+                  )
+                })
+              }
+            </div>
+          )
+        })
+      }
+    </div>
+  );
 }
 
 export function Game(props) {
-  const { history, stepNumber, isReverse, handleClick, jumpTo, reverseHistory, xIsNext } = props;
-  const current = history[stepNumber]
-  const winner = calculateWinner(current.squares);
+  const { history, stepNumber, jumpTo, isReverse, reverseHistory, handleClick, current, status, winner} = props
   let desc;
   const moves = history.map((step, move) => {
     if (move !== 0) {
@@ -68,19 +67,10 @@ export function Game(props) {
     );
   });
 
-  let status;
-  if (winner) {
-    status = 'Winner: ' + winner.squares;
-  } else if (stepNumber === 9) {
-    status = 'Draw！'
-  } else {
-    status = 'Next player: ' + (xIsNext ? 'X' : 'O');
-  }
-
   return (
     <div className="game">
       <div className="game-board">
-        <Board
+        <BoardContainer
           squares={current.squares}
           onClick={(i) => {
             handleClick(i)
@@ -97,27 +87,4 @@ export function Game(props) {
       </div>
     </div>
   );
-}
-
-function calculateWinner(squares) {
-  const lines = [
-    [0, 1, 2],
-    [3, 4, 5],
-    [6, 7, 8],
-    [0, 3, 6],
-    [1, 4, 7],
-    [2, 5, 8],
-    [0, 4, 8],
-    [2, 4, 6],
-  ];
-  for (let i = 0; i < lines.length; i++) {
-    const [a, b, c] = lines[i];
-    if (squares[a] && squares[a] === squares[b] && squares[a] === squares[c]) {
-      return {
-        squares: squares[a],
-        line: lines[i]
-      };
-    }
-  }
-  return null;
 }
