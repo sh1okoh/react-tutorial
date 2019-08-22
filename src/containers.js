@@ -53,4 +53,9 @@ export const BoardContainer = connect(
   mapDispatchToPropsForBoardComponent
 )(Board);
 
-
+export const logger = store => next => action => {
+  console.log(action);
+  let result = next(action);
+  console.log('next state', store.getState());
+  return result;
+}
