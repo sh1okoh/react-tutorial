@@ -45,7 +45,7 @@ export function Board(props) {
 }
 
 export function Game(props) {
-  const { history, stepNumber, jumpTo, isReverse, reverseHistory, handleClick, current, status, winner} = props
+  const { history, stepNumber, jumpTo, isReverse, reverseHistory, current, status, winner} = props
   let desc;
   const moves = history.map((step, move) => {
     if (move !== 0) {
@@ -72,9 +72,6 @@ export function Game(props) {
       <div className="game-board">
         <BoardContainer
           squares={current.squares}
-          onClick={(i) => {
-            handleClick(i)
-          }}
           highlightSquares={ winner ? winner.line : []}
         />
       </div>

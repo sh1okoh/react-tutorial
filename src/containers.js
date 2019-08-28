@@ -1,10 +1,9 @@
 import { connect } from "react-redux";
-import { clickSquare, jumpToPast, reverseHistory } from "./actions";
 import { Game, Board } from "./components";
 import { calculateWinner } from "./utils";
-
+import {　gameCreators } from "./mutations"
 const mapStateToPropsForGameComponent = (state, ownProps) => {
-  const { history, stepNumber, xIsNext, isReverse} = state.game
+  const { history, stepNumber, xIsNext, isReverse} = state
   const current = history[stepNumber];
   const winner = calculateWinner(current.squares);
   let status;
@@ -21,16 +20,16 @@ const mapStateToPropsForGameComponent = (state, ownProps) => {
 const mapDispatchToPropsForGameComponent = (dispatch, ownProps) => {
   return {
     jumpTo: step => {
-      dispatch(jumpToPast(step));
+      dispatch(gameCreators.jumpToPast(step));
     },
     reverseHistory: () => {
-      dispatch(reverseHistory());
+      dispatch(gameCreators.reverseHistory());
     }
   };
 };
 
 const mapStateToPropsForBoardComponent = (state, ownProps) => {
-  const { history, stepNumber } = state.game;
+  const { history, stepNumber } = state;
   const { squares } = history[stepNumber];
   return { squares }
 }
@@ -38,7 +37,7 @@ const mapStateToPropsForBoardComponent = (state, ownProps) => {
 const mapDispatchToPropsForBoardComponent = (dispatch, ownProps) => {
   return {
     handleClick: index => {
-      dispatch(clickSquare(index));
+      dispatch(gameCreators.clickSquare(index));
     }
   }
 }
