@@ -1,15 +1,17 @@
 import { createAggregate } from 'redux-aggregate'
 import { calculateWinner } from "./utils.js"
+import { combineReducers } from 'redux';
 
+/*
+ * mutations
+ */
 const gameMT = {
   clickSquare(state, index) {
     const history = state.history.slice(0, state.stepNumber + 1);
     const current = history[history.length - 1];
     const squares = current.squares.slice();
     if (calculateWinner(squares) || squares[index]) {
-      return {
-        ...state
-      }
+      return state;
     }
     squares[index] = state.xIsNext ? 'X' : 'O';
     return {
@@ -36,6 +38,20 @@ const gameMT = {
   },
 };
 
+/*
+ * aggregates
+ */
+const gameAggregate = createAggregate(gameMT, "game/");
+
+/*
+ * actions
+ */
+export const gameCreators = gameAggregate.creators;
+
+/*
+ * reducers
+ */
+
 export const initialState = {
   history: [
     {
@@ -47,6 +63,8 @@ export const initialState = {
   isReverse: false
 }
 
-const gameAggregate = createAggregate(gameMT, "game/");
-export const gameCreators = gameAggregate.creators;
-export const gameReducer = gameAggregate.reducerFactory(initialState);
+export const gameReducer = gameAggregate.reducerFactory(initialState)
+
+export const rootReducer = combineReducers({
+  game: gameReducer,
+})

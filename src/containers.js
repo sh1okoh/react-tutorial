@@ -2,8 +2,9 @@ import { connect } from "react-redux";
 import { Game, Board } from "./components";
 import { calculateWinner } from "./utils";
 import {　gameCreators } from "./mutations"
+
 const mapStateToPropsForGameComponent = (state, ownProps) => {
-  const { history, stepNumber, xIsNext, isReverse} = state
+  const { history, stepNumber, xIsNext, isReverse} = state.game;
   const current = history[stepNumber];
   const winner = calculateWinner(current.squares);
   let status;
@@ -29,7 +30,7 @@ const mapDispatchToPropsForGameComponent = (dispatch, ownProps) => {
 };
 
 const mapStateToPropsForBoardComponent = (state, ownProps) => {
-  const { history, stepNumber } = state;
+  const { history, stepNumber } = state.game;
   const { squares } = history[stepNumber];
   return { squares }
 }
