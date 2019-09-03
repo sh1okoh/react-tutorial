@@ -1,7 +1,7 @@
 import { connect } from "react-redux";
-import { Game, Board } from "./components";
+import { Game, Board, Information } from "./components.jsx";
 import { calculateWinner } from "./utils";
-import {　gameCreators } from "./mutations"
+import {　gameCreators, informationCreators } from "./mutations";
 
 const mapStateToPropsForGameComponent = (state, ownProps) => {
   const { history, stepNumber, xIsNext, isReverse} = state.game;
@@ -43,6 +43,23 @@ const mapDispatchToPropsForBoardComponent = (dispatch, ownProps) => {
   }
 }
 
+const mapStateToPropsForInformation = (state, ownProps) => {
+  return state.information;
+};
+
+const mapDispatchToPropsForInformation = (dispatch, ownProps) => {
+  return {
+    fetchInformation: () => {
+      dispatch(informationCreators.fetchIPAddress());
+    }
+  };
+};
+
+export const InformationContainer = connect(
+  mapStateToPropsForInformation,
+  mapDispatchToPropsForInformation
+)(Information);
+
 export const GameContainer = connect(
   mapStateToPropsForGameComponent,
   mapDispatchToPropsForGameComponent
@@ -52,11 +69,3 @@ export const BoardContainer = connect(
   mapStateToPropsForBoardComponent,
   mapDispatchToPropsForBoardComponent
 )(Board);
-
-export const logger = store => next => action => {
-  console.log(action);
-  console.log('previous state', store.getState());
-  let result = next(action);
-  console.log('next state', store.getState());
-  return result;
-}

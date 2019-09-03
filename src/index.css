@@ -56,3 +56,7 @@ ol, ul {
 .highlight {
   background: yellow;
 }
+
+.information {
+  margin: 20px;
+}

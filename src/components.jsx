@@ -1,5 +1,21 @@
-import React from 'react';
-import { BoardContainer } from './containers';
+import React, { useEffect } from 'react';
+import { BoardContainer, InformationContainer } from './containers';
+
+export function Information(props) {
+  const { fetchInformation, ipAddress, country } = props;
+  useEffect(() => {
+    fetchInformation();
+  }, [])
+
+  return (
+    <div className="information">
+      <ul>
+        <li>IPアドレス：{ipAddress}</li>
+        <li>国籍：{country}</li>
+      </ul>
+    </div>
+  );
+}
 
 function Square(props) {
   const { value, onClick } = props
@@ -68,6 +84,8 @@ export function Game(props) {
   });
 
   return (
+    <div>
+      <InformationContainer />
     <div className="game">
       <div className="game-board">
         <BoardContainer
@@ -82,6 +100,7 @@ export function Game(props) {
         <div>{status}</div>
         <ol>{isReverse ? moves : moves.reverse()}</ol>
       </div>
+    </div>
     </div>
   );
 }
