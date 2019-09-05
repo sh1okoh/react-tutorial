@@ -38,20 +38,34 @@ const gameMT = {
   },
 };
 
+const informationMT = {
+  fetchIPAddress(state) {
+    return state;
+  },
+  fetchIPAddressFulfilled(state, ipAddress) {
+    return { ...state, ipAddress };
+  },
+  fetchCountryFulFilled(state, country) {
+    return {...state, country};
+  }
+}
+
 /*
  * aggregates
  */
 const gameAggregate = createAggregate(gameMT, "game/");
+const informationAggregate = createAggregate(informationMT, "information/");
 
 /*
  * actions
  */
 export const gameCreators = gameAggregate.creators;
+export const informationTypes = informationAggregate.types;
+export const informationCreators = informationAggregate.creators;
 
 /*
  * reducers
  */
-
 export const initialState = {
   history: [
     {
@@ -64,7 +78,12 @@ export const initialState = {
 }
 
 export const gameReducer = gameAggregate.reducerFactory(initialState)
+export const informationReducer = informationAggregate.reducerFactory({
+  ipAddress: undefined,
+  country: undefined
+});
 
 export const rootReducer = combineReducers({
   game: gameReducer,
-})
+  information: informationReducer
+});
